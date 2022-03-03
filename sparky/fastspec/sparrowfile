@@ -1,0 +1,48 @@
+use Sparky::JobApi;
+
+class Pipeline does Sparky::JobApi::Role {
+
+  method stage-test {
+
+    say "hello-world";
+  }
+
+
+  method stage-main {
+
+      my $j = self.new-job;
+
+      $j.queue({
+        description => "test",
+        tags => %(
+          stage => "test",
+        ),
+        #sparrowdo => %(
+        #  no_sudo => True,
+        #  bootstrap => False
+        #),
+      });
+
+
+      my $s = self.wait-job($j);
+
+      my $sj = Sparky::JobApi.new: :api(%*ENV<PARENT_API>), :project(%*ENV<PARENT_PROJECT>), :job-id(%*ENV<PARENT_JOB_ID>);
+
+      # /report/raw/$project/$key
+
+      my %j = $s.info;
+
+      my $r = HTTP::Tiny.get: "http://127.0.0.1:4000/report/raw/{%j<project>}/{%j<job-id>}";
+
+      my $log = $r<content> ?? $r<content>.decode !! '';
+
+      if $s<OK> {
+        $sj.put-stash({ status => "OK", log => $log  });
+      } else {
+        $sj.put-stash({ status => "FAIL", log => $log  });
+      }
+  }
+
+}
+
+Pipeline.new.run;  
