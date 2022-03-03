@@ -1,0 +1,59 @@
+use Sparky::JobApi;
+class Pipeline does Sparky::JobApi::Role {
+
+  method stage-test {
+
+    bash qq:to/HERE/, %( description => "az container create" );
+    set -x 
+    az container create -g sparky \\
+      --name spk-01 \\
+      --image melezhik/sparky-fastspec:latest \\
+      --cpu 2 --memory 7 \\
+      --secure-environment-variables SPARKY_API_TOKEN={%*ENV<SPARKY_API_TOKEN>} \\
+      PARENT_PROJECT={tags()<SPARKY_PROJECT>} \\
+      PARENT_JOB_ID={tags()<SPARKY_JOB_ID>} \\
+      PARENT_API=http://sparrowhub.io:4000 \\
+    HERE
+    
+    bash qq:to/HERE/;
+    az container exec -g sparky --name spk-01 \\
+    --exec-command "curl -d '' -X POST 127.0.0.1:4000/build/project/fastspec -D -"
+    HERE
+
+    my $j = Sparky::JobApi.new: :mine(True);
+
+    my $s;
+
+    while True {
+      $s = $j.get-stash();
+      last if $s<log>;
+    }
+
+    say $s<log>;
+
+  }
+
+
+  method stage-main {
+
+      my $j = self.new-job;
+
+      $j.queue({
+        description => "run az container job",
+        tags => %(
+          stage => "test",
+        ),
+        #sparrowdo => %(
+        #  no_sudo => True,
+        #  bootstrap => False
+        #),
+      });
+
+
+      my $s = self.wait-job($j); die if $s<FAIL>;
+
+  }
+
+}
+
+Pipeline.new.run;  
