@@ -38,6 +38,8 @@ class Pipeline does Sparky::JobApi::Role {
 
     say $s<log>;
 
+    say "remove container ...";
+
     bash qq:to/HERE/;
     az container delete -g sparky --name spk-01
     HERE
