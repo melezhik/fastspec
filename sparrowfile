@@ -20,7 +20,7 @@ class Pipeline does Sparky::JobApi::Role {
 
     bash qq:to/HERE/, %( description => "run sparky job" );
     az container exec -g sparky --name spk-01 \\
-    --exec-command "curl -fs -d '' --retry-delay 10 --retry-connrefused --retry 10 -X POST 127.0.0.1:4000/build/project/fastspec 2>\&1" \\
+    --exec-command "curl -fs -d '' --retry-delay 10 --retry-connrefused --retry 10 -X POST 127.0.0.1:4000/build/project/fastspec" \\
     -o table
     HERE
 
@@ -55,6 +55,8 @@ class Pipeline does Sparky::JobApi::Role {
         description => "run az container job",
         tags => %(
           stage => "test",
+          cpu => $.cpu,
+          mem => $.mem,
         ),
         #sparrowdo => %(
         #  no_sudo => True,
