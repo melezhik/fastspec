@@ -30,7 +30,7 @@ class Pipeline does Sparky::JobApi::Role {
 
       # /report/raw/$project/$key
 
-      my %j = $s.info;
+      my %j = $j.info;
 
       my $r = HTTP::Tiny.get: "http://127.0.0.1:4000/report/raw/{%j<project>}/{%j<job-id>}";
 
