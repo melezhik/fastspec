@@ -18,7 +18,7 @@ class Pipeline does Sparky::JobApi::Role {
     #exit(0);
     bash qq:to/HERE/;
     az container exec -g sparky --name spk-01 \\
-    --exec-command "curl -d '' --retry-delay 10 --retry-connrefused --retry 10 -X POST 127.0.0.1:4000/build/project/fastspec -D -" \\
+    --exec-command "curl -d '' --retry-delay 10 --retry-connrefused --retry 10 -X POST 127.0.0.1:4000/build/project/fastspec -D - 2>&1" \\
     -o table
     HERE
 
@@ -32,7 +32,7 @@ class Pipeline does Sparky::JobApi::Role {
       sleep(10);
       last if $s<log>;
       $i++;
-      say "wait to job finishes, attmp  #{$i}"
+      say "wait to job finishes, attmp  #{$i}";
       last if $i > 10;
     }
 
