@@ -4,7 +4,7 @@ class Pipeline does Sparky::JobApi::Role {
   method stage-test {
 
     bash qq:to/HERE/, %( description => "az container create" );
-    set -x 
+    #set -x 
     az container create -g sparky \\
       --name spk-01 \\
       --image melezhik/sparky-fastspec:latest \\
@@ -12,12 +12,13 @@ class Pipeline does Sparky::JobApi::Role {
       --secure-environment-variables SPARKY_API_TOKEN={%*ENV<SPARKY_API_TOKEN>} \\
       PARENT_PROJECT={tags()<SPARKY_PROJECT>} \\
       PARENT_JOB_ID={tags()<SPARKY_JOB_ID>} \\
-      PARENT_API=http://sparrowhub.io:4000 \\
+      PARENT_API=http://sparrowhub.io:4000 -o table
     HERE
-    
+    #exit(0);
     bash qq:to/HERE/;
     az container exec -g sparky --name spk-01 \\
-    --exec-command "curl -d '' -X POST 127.0.0.1:4000/build/project/fastspec -D -"
+    --exec-command "sleep 30; curl -d '' -X POST 127.0.0.1:4000/build/project/fastspec -D -" \\
+    -o table
     HERE
 
     my $j = Sparky::JobApi.new: :mine(True);
@@ -26,10 +27,15 @@ class Pipeline does Sparky::JobApi::Role {
 
     while True {
       $s = $j.get-stash();
+      sleep(10);
       last if $s<log>;
     }
 
     say $s<log>;
+
+    bash qq:to/HERE/;
+    az container delete -g sparky --name spk-01
+    HERE
 
   }
 
