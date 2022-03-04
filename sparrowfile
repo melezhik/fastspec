@@ -16,7 +16,7 @@ class Pipeline does Sparky::JobApi::Role {
       PARENT_API=http://sparrowhub.io:4000 -o table
     HERE
     #exit(0);
-    bash qq:to/HERE/;
+    bash qq:to/HERE/, %( description => "run sparky job" );
     az container exec -g sparky --name spk-01 \\
     --exec-command "curl -d '' --retry-delay 10 --retry-connrefused --retry 10 -X POST 127.0.0.1:4000/build/project/fastspec -D - 2>&1" \\
     -o table
