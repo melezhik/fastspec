@@ -1,8 +1,8 @@
 use Sparky::JobApi;
 class Pipeline does Sparky::JobApi::Role {
 
-  has Int $.cpu = tags()<cpu>.Int || 2;
-  has Int $.mem = tags()<mem>.Int || 7;
+  has Str $.cpu = tags()<cpu> || "2";
+  has Str $.mem = tags()<mem> || "7";
 
   method stage-test {
 
