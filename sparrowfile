@@ -72,7 +72,7 @@ class Pipeline does Sparky::JobApi::Role {
 
     }
 
-    my $s = self.wait-jobs(@j); 
+    my $s = self.wait-jobs(@jobs); 
 
     die if $s<FAIL>;
 
