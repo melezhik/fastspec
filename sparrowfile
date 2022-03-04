@@ -7,7 +7,7 @@ class Pipeline does Sparky::JobApi::Role {
     #set -x 
     az container create -g sparky \\
       --name spk-01 \\
-      --image melezhik/sparky-fastspec:v2 \\
+      --image melezhik/sparky-fastspec:latest \\
       --cpu 2 --memory 7 \\
       --ports 4000 --dns-name-label spk-01 \\
       --secure-environment-variables SPARKY_API_TOKEN={%*ENV<SPARKY_API_TOKEN>} \\
