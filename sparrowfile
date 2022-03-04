@@ -49,10 +49,14 @@ class Pipeline does Sparky::JobApi::Role {
 
   method stage-main {
 
-      my $j = self.new-job;
+    my @jobs;
+
+    for 1 .. 10 -> $i {
+
+      my $j = self.new-job: :workers<6>;
 
       $j.queue({
-        description => "run az container job",
+        description => "run az container job #{$i}",
         tags => %(
           stage => "test",
           cpu => $.cpu,
@@ -64,10 +68,13 @@ class Pipeline does Sparky::JobApi::Role {
         #),
       });
 
+      @jobs.push: $j;
 
-      my $s = self.wait-job($j); 
+    }
 
-      die if $s<FAIL>;
+    my $s = self.wait-jobs(@j); 
+
+    die if $s<FAIL>;
 
   }
 
