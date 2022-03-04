@@ -1,5 +1,7 @@
 FROM melezhik/sparky
 
+RUN rm -rf /tmp/fastspec
+
 RUN echo OK3 && git clone https://github.com/melezhik/fastspec.git /tmp/fastspec/
 
 RUN echo OK3 && cp -r /tmp/fastspec/sparky/fastspec /home/raku/.sparky/projects/
