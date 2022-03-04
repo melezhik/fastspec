@@ -1,24 +1,26 @@
 use Sparky::JobApi;
 class Pipeline does Sparky::JobApi::Role {
 
+  has Str $.cpu = tags()<cpu> || 2;
+  has Str $.mem = tags()<mem> || 7;
+
   method stage-test {
 
     bash qq:to/HERE/, %( description => "az container create" );
     #set -x 
     az container create -g sparky \\
       --name spk-01 \\
-      --image melezhik/sparky-fastspec:latest \\
-      --cpu 2 --memory 7 \\
-      --ports 4000 --dns-name-label spk-01 \\
+      --image melezhik/sparky-fastspec:v3 \\
+      --cpu {$.cpu} --memory {$.mem} \\
       --secure-environment-variables SPARKY_API_TOKEN={%*ENV<SPARKY_API_TOKEN>} \\
       PARENT_PROJECT={tags()<SPARKY_PROJECT>} \\
       PARENT_JOB_ID={tags()<SPARKY_JOB_ID>} \\
       PARENT_API=http://sparrowhub.io:4000 -o table
     HERE
-    #exit(0);
+
     bash qq:to/HERE/, %( description => "run sparky job" );
     az container exec -g sparky --name spk-01 \\
-    --exec-command "curl -s -d '' --retry-delay 10 --retry-connrefused --retry 10 -X POST 127.0.0.1:4000/build/project/fastspec -D - 2>\&1" \\
+    --exec-command "curl -fs -d '' --retry-delay 10 --retry-connrefused --retry 10 -X POST 127.0.0.1:4000/build/project/fastspec 2>\&1" \\
     -o table
     HERE
 
@@ -29,18 +31,18 @@ class Pipeline does Sparky::JobApi::Role {
     my $i = 0;
     while True {
       $s = $j.get-stash();
-      sleep(10);
+      sleep(3);
       last if $s<log>;
       $i++;
       say "wait to job finishes, attmp  #{$i}";
-      last if $i > 10;
+      last if $i >= 5;
     }
 
-    say $s<log>;
+    say "remote job log: ", $s<log>;
 
-    bash qq:to/HERE/;
-    az container delete -g sparky --name spk-01
-    HERE
+    bash "az container delete -g sparky --name spk-01 -y -o table", %(
+      description => "delete container";
+    );
 
   }
 
@@ -61,7 +63,9 @@ class Pipeline does Sparky::JobApi::Role {
       });
 
 
-      my $s = self.wait-job($j); die if $s<FAIL>;
+      my $s = self.wait-job($j); 
+
+      die if $s<FAIL>;
 
   }
 
