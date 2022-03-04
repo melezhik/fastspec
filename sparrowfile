@@ -16,8 +16,10 @@ class Pipeline does Sparky::JobApi::Role {
     HERE
     #exit(0);
     bash qq:to/HERE/;
+    set -x \\
+    sleep 20;
     az container exec -g sparky --name spk-01 \\
-    --exec-command "sleep 30; curl -d '' -X POST 127.0.0.1:4000/build/project/fastspec -D -" \\
+    --exec-command "curl -d '' -X POST 127.0.0.1:4000/build/project/fastspec -D -" \\
     -o table
     HERE
 
@@ -25,10 +27,13 @@ class Pipeline does Sparky::JobApi::Role {
 
     my $s;
 
+    my $i = 0;
     while True {
       $s = $j.get-stash();
       sleep(10);
       last if $s<log>;
+      $i++;
+      last if $i > 10;
     }
 
     say $s<log>;
