@@ -16,6 +16,7 @@ class Pipeline does Sparky::JobApi::Role {
         --image melezhik/sparky-fastspec:v3 \\
         --cpu {$.cpu} --memory {$.mem} \\
         --secure-environment-variables SPARKY_API_TOKEN={%*ENV<SPARKY_API_TOKEN>} \\
+        GIT_URL=git\@github.com:melezhik/fastspec.git \\
         NOTIFY_PROJECT={self.notify-project} \\
         NOTIFY_JOB={self.notify-job} \\
         NOTIFY_API=http://sparrowhub.io:4000 -o table
@@ -23,7 +24,7 @@ class Pipeline does Sparky::JobApi::Role {
 
     bash qq:to/HERE/, %( description => "run sparky job" );
       az container exec -g sparky --name spk-0{$.num} \\
-      --exec-command "curl -fs -d '' --retry-delay 10 --retry-connrefused --retry 10 -X POST 127.0.0.1:4000/build/project/fastspec" \\
+      --exec-command "curl -fs -d '' --retry-delay 10 --retry-connrefused --retry 10 -X POST 127.0.0.1:4000/build/project/container" \\
       -o table
     HERE
 
