@@ -7,7 +7,7 @@ class Pipeline does Sparky::JobApi::Role {
   has Str $.notify-project = tags()<notify-project> || "";;
   has Str $.notify-job = tags()<notify-job> || "";;
 
-  method stage-test {
+  method stage-container-job {
 
     bash qq:to/HERE/, %( description => "az container create" );
     #set -x 
@@ -48,7 +48,7 @@ class Pipeline does Sparky::JobApi::Role {
       $cj.queue({
         description => "run az container job #{$i}",
         tags => %(
-          stage => "test",
+          stage => "container-job",
           cpu => $.cpu,
           mem => $.mem,
           num => $i,
