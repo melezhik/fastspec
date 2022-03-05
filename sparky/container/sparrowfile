@@ -11,7 +11,7 @@ class Pipeline does Sparky::JobApi::Role {
 
     directory "sparky";
 
-    git-scm $,git-url, %(
+    git-scm $.git-url, %(
       to => "sparky"
     );
     
