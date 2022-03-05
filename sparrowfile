@@ -3,13 +3,14 @@ class Pipeline does Sparky::JobApi::Role {
 
   has Str $.cpu = tags()<cpu> || "2";
   has Str $.mem = tags()<mem> || "7";
+  has Str $.num = tags()<num> || "0";
 
   method stage-test {
 
     bash qq:to/HERE/, %( description => "az container create" );
     #set -x 
     az container create -g sparky \\
-      --name spk-01 \\
+      --name spk-0{$.num} \\
       --image melezhik/sparky-fastspec:v3 \\
       --cpu {$.cpu} --memory {$.mem} \\
       --secure-environment-variables SPARKY_API_TOKEN={%*ENV<SPARKY_API_TOKEN>} \\
@@ -19,7 +20,7 @@ class Pipeline does Sparky::JobApi::Role {
     HERE
 
     bash qq:to/HERE/, %( description => "run sparky job" );
-    az container exec -g sparky --name spk-01 \\
+    az container exec -g sparky --name spk-0{$.num} \\
     --exec-command "curl -fs -d '' --retry-delay 10 --retry-connrefused --retry 10 -X POST 127.0.0.1:4000/build/project/fastspec" \\
     -o table
     HERE
@@ -40,7 +41,7 @@ class Pipeline does Sparky::JobApi::Role {
 
     say "remote job log: ", $s<log>;
 
-    bash "az container delete -g sparky --name spk-01 -y -o table", %(
+    bash "az container delete -g sparky --name spk-0{$.num} -y -o table", %(
       description => "delete container";
     );
 
@@ -51,9 +52,9 @@ class Pipeline does Sparky::JobApi::Role {
 
     my @jobs;
 
-    for 1 .. 10 -> $i {
+    for 1 .. 9 -> $i {
 
-      my $j = self.new-job: :workers<6>;
+      my $j = self.new-job: :workers<67>;
 
       $j.queue({
         description => "run az container job #{$i}",
@@ -61,6 +62,7 @@ class Pipeline does Sparky::JobApi::Role {
           stage => "test",
           cpu => $.cpu,
           mem => $.mem,
+          num => $i
         ),
         #sparrowdo => %(
         #  no_sudo => True,
