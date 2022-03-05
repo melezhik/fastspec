@@ -76,6 +76,8 @@ class Pipeline does Sparky::JobApi::Role {
 
     my $s = self.wait-jobs(@jobs); 
 
+    say "{now - INIT now} sec passed";
+
     die if $s<FAIL>;
 
   }
