@@ -32,11 +32,11 @@ class Pipeline does Sparky::JobApi::Role {
     my $i = 0;
     while True {
       $s = $j.get-stash();
-      sleep(3);
+      sleep(5);
       last if $s<log>;
       $i++;
       say "wait to job finishes, attmp  #{$i}";
-      last if $i >= 5;
+      last if $i >= 10;
     }
 
     say "remote job log: ", $s<log>;
@@ -52,7 +52,7 @@ class Pipeline does Sparky::JobApi::Role {
 
     my @jobs;
 
-    for 1 .. 9 -> $i {
+    for 1 .. 7 -> $i {
 
       my $j = self.new-job: :workers<67>;
 
