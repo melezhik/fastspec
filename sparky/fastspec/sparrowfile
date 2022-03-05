@@ -3,9 +3,15 @@ use HTTP::Tiny;
 
 class Pipeline does Sparky::JobApi::Role {
 
+  has Str $.worker = %*ENV<WORKER> || tags()<worker>;
+  has Str $.notify-api = %*ENV<NOTIFY_API> || "";
+  has Str $.notify-project = %*ENV<NOTIFY_PROJECT> || "";
+  has Str $.notify-job = %*ENV<NOTIFY_JOB> || "";
+
   method stage-test {
 
     say "hello-world";
+
   }
 
 
@@ -16,20 +22,18 @@ class Pipeline does Sparky::JobApi::Role {
       $j.queue({
         description => "test",
         tags => %(
-          stage => "test",
+          stage => "test"
         ),
-        #sparrowdo => %(
-        #  no_sudo => True,
-        #  bootstrap => False
-        #),
       });
 
 
       my $s = self.wait-job($j);
 
-      my $sj = Sparky::JobApi.new: :api(%*ENV<PARENT_API>), :project(%*ENV<PARENT_PROJECT>), :job-id(%*ENV<PARENT_JOB_ID>);
+      my $nj = self.new-job: 
+        :api($.notify-api), 
+        :project($.notify-project), 
+        :job-id($.notify-job);
 
-      # /report/raw/$project/$key
 
       my %j = $j.info;
 
@@ -38,10 +42,27 @@ class Pipeline does Sparky::JobApi::Role {
       my $log = $r<content> ?? $r<content>.decode !! '';
 
       if $s<OK> {
-        $sj.put-stash({ status => "OK", log => $log  });
+        $nj.put-stash({ status => "OK", log => $log  });
       } else {
-        $sj.put-stash({ status => "FAIL", log => $log  });
+        $nj.put-stash({ status => "FAIL", log => $log  });
       }
+
+      $nj.queue({
+        description => "notification from {$.worker}",
+        tags => %(
+          stage => "notify",
+          worker => $.worker
+        ),
+      });
+      
+  }
+
+  method stage-notify {
+
+    my $nj = self.new-job: :mine(True);
+
+    say $nj.get-stash().perl;
+
   }
 
 }
