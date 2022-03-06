@@ -17,7 +17,7 @@ class Pipeline does Sparky::JobApi::Role {
         --image melezhik/sparky-fastspec:v5 \\
         --cpu {$.cpu} --memory {$.mem} \\
         --secure-environment-variables SPARKY_API_TOKEN={%*ENV<SPARKY_API_TOKEN>} \\
-        GIT_URL=git\@github.com:melezhik/fastspec.git \\
+        GIT_URL=https://github.com/melezhik/fastspec.git \\
         SPARKY_PROJECT="fastspec" \\
         NOTIFY_PROJECT={self.notify-project} \\
         NOTIFY_JOB={self.notify-job} \\
