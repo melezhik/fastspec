@@ -24,7 +24,7 @@ class Pipeline does Sparky::JobApi::Role {
         NOTIFY_API=http://sparrowhub.io:4000 -o table
     HERE
 
-    my $j = self.new-job: :workers<4>;
+    my $j = self.new-job: :workers<3>;
 
     $j.queue({
       description => "run az container job #{$.num}",
