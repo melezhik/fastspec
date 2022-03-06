@@ -2,6 +2,7 @@ use Sparky::JobApi;
 class Pipeline does Sparky::JobApi::Role {
 
   has Str $.cpu = tags()<cpu> || "2";
+  has Str $.max = tags()<max> || "5";
   has Str $.mem = tags()<mem> || "7";
   has Str $.num = tags()<num> || "0";
   has Str $.notify-project = tags()<notify-project> || "";;
@@ -13,7 +14,7 @@ class Pipeline does Sparky::JobApi::Role {
     #set -x 
       az container create -g sparky \\
         --name spk-0{$.num} \\
-        --image melezhik/sparky-fastspec:v3 \\
+        --image melezhik/sparky-fastspec:v5 \\
         --cpu {$.cpu} --memory {$.mem} \\
         --secure-environment-variables SPARKY_API_TOKEN={%*ENV<SPARKY_API_TOKEN>} \\
         GIT_URL=git\@github.com:melezhik/fastspec.git \\
@@ -37,7 +38,7 @@ class Pipeline does Sparky::JobApi::Role {
     my @cjobs;
     my @njobs;
 
-    for 1 .. 7 -> $i {
+    for 1 .. $.max.Int -> $i {
 
       my $cj = self.new-job: :workers<4>;
 
