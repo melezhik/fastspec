@@ -16,7 +16,7 @@ class Pipeline does Sparky::JobApi::Role {
     );
     
     bash "pwd && ls -l && cp -rv {$.sparky-project} ~/.sparky/projects/", %(
-     cwd => "{$*CWD}/sparky"
+     cwd => "{$*CWD}/sparky/sparky"
     );
 
     task-run "build {$.sparky-project}", "curl", %(
