@@ -14,7 +14,7 @@ class Pipeline does Sparky::JobApi::Role {
     #set -x 
       az container create -g sparky \\
         --name spk-0{$.num} \\
-        --image melezhik/sparky-fastspec:v5 \\
+        --image melezhik/sparky-fastspec:v6 \\
         --cpu {$.cpu} --memory {$.mem} \\
         --secure-environment-variables SPARKY_API_TOKEN={%*ENV<SPARKY_API_TOKEN>} \\
         GIT_URL=https://github.com/melezhik/fastspec.git \\
