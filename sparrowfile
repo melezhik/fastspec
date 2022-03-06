@@ -29,7 +29,7 @@ class Pipeline does Sparky::JobApi::Role {
     $j.queue({
       description => "run az container job #{$.num}",
       tags => %(
-        stage => "container-job",
+        stage => "run-container-job",
         num => $.num,
       ),
     });
