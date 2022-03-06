@@ -40,7 +40,7 @@ class Pipeline does Sparky::JobApi::Role {
 
     for 1 .. $.max.Int -> $i {
 
-      my $cj = self.new-job: :workers<4>;
+      my $cj = self.new-job: :workers<5>;
 
       my $nj = self.new-job: :project<fastspec.notify>, :job-id($cj.info()<job-id>);
 
@@ -71,7 +71,7 @@ class Pipeline does Sparky::JobApi::Role {
     # remove containers
     say "clean up containers ...";
 
-    for 1 .. 7 -> $i {
+    for 1 .. $.max.Int -> $i {
 
       bash "az container delete -g sparky --name spk-0{$i} -y -o table || echo", %(
         description => "delete container";
