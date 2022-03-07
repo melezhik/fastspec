@@ -25,7 +25,7 @@ class Pipeline does Sparky::JobApi::Role {
         NOTIFY_API=http://sparrowhub.io:4000 -o table
     HERE
 
-    my $j = self.new-job: :workers<3>;
+    my $j = self.new-job: :workers<5>;
 
     $j.queue({
       description => "run az container job #{$.num}",
@@ -55,7 +55,7 @@ class Pipeline does Sparky::JobApi::Role {
 
     for 1 .. $.max.Int -> $i {
 
-      my $cj = self.new-job: :workers<4>;
+      my $cj = self.new-job: :workers<5>;
 
       my $nj = self.new-job: :project<fastspec.notify>, :job-id($cj.info()<job-id>);
 
@@ -84,7 +84,7 @@ class Pipeline does Sparky::JobApi::Role {
     my $s2 = self.wait-jobs(@njobs); 
 
     # remove containers
-    say "clean up containers ...";
+    say "clean up containers just in case ...";
 
     for 1 .. $.max.Int -> $i {
 

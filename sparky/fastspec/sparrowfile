@@ -63,6 +63,10 @@ class Pipeline does Sparky::JobApi::Role {
 
     say $nj.get-stash().perl;
 
+    bash "az container delete -g sparky --name {$.worker} -y -o table || echo", %(
+      description => "delete container";
+    );
+
   }
 
 }
