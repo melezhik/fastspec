@@ -7,7 +7,7 @@ class Pipeline does Sparky::JobApi::Role {
   has Str $.notify-api = %*ENV<NOTIFY_API> || "";
   has Str $.notify-project = %*ENV<NOTIFY_PROJECT> || "";
   has Str $.notify-job = %*ENV<NOTIFY_JOB> || "";
-  has Str $.spec-chunks = %*ENV<SPEC_CHUNKS>;
+  has Str $.spec-chunks = %*ENV<SPEC_CHUNKS> || tags()<spec_chunks>;
 
   method stage-test {
 
