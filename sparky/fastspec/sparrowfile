@@ -8,6 +8,7 @@ class Pipeline does Sparky::JobApi::Role {
   has Str $.notify-project = %*ENV<NOTIFY_PROJECT> || "";
   has Str $.notify-job = %*ENV<NOTIFY_JOB> || "";
   has Str $.spec-chunks = %*ENV<SPEC_CHUNKS> || tags()<spec_chunks> || "";
+  has Str $.build-rakudo = tags()<build_rakudo> || "yes";
 
   method stage-test {
 
@@ -20,7 +21,7 @@ class Pipeline does Sparky::JobApi::Role {
     bash "perl Configure.pl --gen-moar --gen-nqp --backends=moar && make install", %(
       cwd => "{$*CWD}/rakudo",
       description => "build moar"
-    );
+    ) if $.build-rakudo;
 
     bash "git clone https://github.com/Raku/roast.git t/spec", %(
       cwd => "{$*CWD}/rakudo",
@@ -33,15 +34,17 @@ class Pipeline does Sparky::JobApi::Role {
 
     my $chunk = ($lines-cnt / $.spec-chunks.Int ).Int;
 
-    my @t; 
+    say "spectest.data lines cnt: {$lines-cnt} | chunk size: {$chunk}";
 
-    say "test chunk size: $chunk";
+    my @t; 
 
     for $chunk*($.worker.Int - 1) .. $chunk*($.worker.Int )   -> $i {
         @t.push: @lines[$i];
     }
 
     "rakudo/t/spec/spectest.data.chunk".IO.spurt(@t.join("\n"));
+
+    say "spectest.data.chunk: ", "rakudo/t/spec/spectest.data.chunk".IO.slurp;
 
     bash q:to /HERE/, %( cwd => "{$*CWD}/rakudo" , description => "spectest");
       perl -Itools/lib \
