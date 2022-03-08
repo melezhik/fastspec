@@ -99,7 +99,13 @@ class Pipeline does Sparky::JobApi::Role {
 
     my $nj = self.new-job: :mine(True);
 
-    say $nj.get-stash().perl;
+    my $report = $nj.get-stash();
+
+    say "=========================";
+
+    say "status: ", $report<status>;
+
+    say "log: ", $report<log>;
 
     bash "az container delete -g sparky --name {$.worker} -y -o table || echo", %(
       description => "delete container";

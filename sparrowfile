@@ -55,7 +55,7 @@ class Pipeline does Sparky::JobApi::Role {
     my @cjobs;
     my @njobs;
 
-    say "cost: ", (0.00445*($.mem.Int)*30*($.max.Int) + 0.04050*($.cpu.Int)*30*($.max,Int)), '$ for 30 hours';
+    say "cost: \$", (0.00445*($.mem.Int)*30*($.max.Int) + 0.04050*($.cpu.Int)*30*($.max,Int)), '  for 30 hours';
 
     for 1 .. $.max.Int -> $i {
 
