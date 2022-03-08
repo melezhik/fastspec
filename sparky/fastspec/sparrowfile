@@ -21,7 +21,7 @@ class Pipeline does Sparky::JobApi::Role {
     bash "perl Configure.pl --gen-moar --gen-nqp --backends=moar && make install", %(
       cwd => "{$*CWD}/rakudo",
       description => "build moar"
-    ) if $.build-rakudo;
+    ) if $.build-rakudo eq "yes";
 
     bash "git clone https://github.com/Raku/roast.git t/spec", %(
       cwd => "{$*CWD}/rakudo",
@@ -42,15 +42,17 @@ class Pipeline does Sparky::JobApi::Role {
         @t.push: @lines[$i];
     }
 
-    "rakudo/t/spec/spectest.data.chunk".IO.spurt(@t.join("\n"));
+    "rakudo/t/spec/spectest.chunk.data".IO.spurt(@t.join("\n"));
 
-    say "spectest.data.chunk: ", "rakudo/t/spec/spectest.data.chunk".IO.slurp;
+    say "spectest.chunk.data: \n", "rakudo/t/spec/spectest.chunk.data".IO.slurp;
 
     bash q:to /HERE/, %( cwd => "{$*CWD}/rakudo" , description => "spectest");
+      set -x
+      pwd
+      ls -l t/spec/spectest.chunk.data
       perl -Itools/lib \
       -I3rdparty/nqp-configure/lib \
-      t/harness5 --moar --fudge --keep-exit-code --tests-from-file=\
-      t/spec/spectest.data.chunk
+      t/harness5 --moar --fudge --keep-exit-code --tests-from-file=t/spec/spectest.chunk.data
     HERE
 
   }
