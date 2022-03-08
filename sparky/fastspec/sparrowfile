@@ -10,7 +10,39 @@ class Pipeline does Sparky::JobApi::Role {
 
   method stage-test {
 
-    say "hello-world";
+    directory "rakudo";
+
+    git-scm "https://github.com/rakudo/rakudo.git", %(
+      to => "rakudo"
+    );
+
+    bash "perl Configure.pl --gen-moar --gen-nqp --backends=moar", %(
+      cwd => "{$*CWD}/rakudo",
+      description => "build moar"
+    );
+
+    my @lines = "t/spec/spectest.data".IO.lines;
+
+    my $lines-cnt = @lines.elems;
+
+    my $chunk = ($lines-cnt / 10).Int;
+
+    my @t; 
+
+    say "test chunk size: $chunk";
+
+    for $chunk*($.worker.Int - 1) .. $chunk*($.worker.Int )   -> $i {
+        @t.push: @lines[$i];
+    }
+
+    "t/spec/spectest.data.chunk".IO.spurt(@t.join("\n"));
+
+    bash q:to /HERE/, %( cwd => "{$*CWD}/rakudo" , description => "spectest");
+      perl -Itools/lib \
+      -I3rdparty/nqp-configure/lib \
+      t/harness5 --moar --fudge --keep-exit-code --tests-from-file=\
+      t/spec/spectest.data.chunk
+    HERE
 
   }
 
