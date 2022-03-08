@@ -27,7 +27,7 @@ class Pipeline does Sparky::JobApi::Role {
       description => "clone roast spec"
     );
 
-    my @lines = "t/spec/spectest.data".IO.lines;
+    my @lines = "rakudo/t/spec/spectest.data".IO.lines;
 
     my $lines-cnt = @lines.elems;
 
@@ -41,7 +41,7 @@ class Pipeline does Sparky::JobApi::Role {
         @t.push: @lines[$i];
     }
 
-    "t/spec/spectest.data.chunk".IO.spurt(@t.join("\n"));
+    "rakudo/t/spec/spectest.data.chunk".IO.spurt(@t.join("\n"));
 
     bash q:to /HERE/, %( cwd => "{$*CWD}/rakudo" , description => "spectest");
       perl -Itools/lib \
