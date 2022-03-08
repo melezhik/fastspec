@@ -20,6 +20,7 @@ class Pipeline does Sparky::JobApi::Role {
         GIT_URL=https://github.com/melezhik/fastspec.git \\
         WORKER="{$.num}" \\
         SPEC_CHUNKS="{$.max}" \\
+        SPARKY_TIMEOUT=5 \\
         SPARKY_PROJECT="fastspec" \\
         NOTIFY_PROJECT={self.notify-project} \\
         NOTIFY_JOB={self.notify-job} \\
