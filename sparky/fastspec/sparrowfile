@@ -86,7 +86,7 @@ class Pipeline does Sparky::JobApi::Role {
       }
 
       $nj.queue({
-        description => "notification from {$.worker}",
+        description => "testspec 0{$.worker} report",
         tags => %(
           stage => "notify",
           worker => $.worker
