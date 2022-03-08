@@ -1,8 +1,11 @@
 Cost
 
+instance configuration: 1 CPU 7 GB
+
 raku -e 'say 0.00445*7*30*10 + 0.04050*1*30*10'
 ==============================================
 $21.495
+
 
 30 hours a month, 10 instances
 
