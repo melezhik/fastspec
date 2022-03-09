@@ -38,7 +38,13 @@ class Pipeline does Sparky::JobApi::Role {
 
     my @t; 
 
-    for $chunk*($.worker.Int - 1) .. $chunk*($.worker.Int )   -> $i {
+    my $from = $chunk*($.worker.Int - 1);
+
+    my $to = $.worker.Int == $.spec-chunks.Int ?? ( @lines.elems - 1 ) !! $chunk*($.worker.Int );
+
+    say "chunk, process lines [$from ..$to]";
+
+    for $from .. $to   -> $i {
         @t.push: @lines[$i];
     }
 
