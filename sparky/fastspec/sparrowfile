@@ -18,7 +18,7 @@ class Pipeline does Sparky::JobApi::Role {
       to => "rakudo"
     );
 
-    bash "perl Configure.pl --gen-moar --gen-nqp --backends=moar 1>/dev/null 2>/dev/null && make install 1>/dev/null 2>/dev/null", %(
+    bash "perl Configure.pl --gen-moar --gen-nqp --backends=moar 1>rakudo.build.log 2>/dev/null && make install 1>>rakudo.build.log 2>/dev/null", %(
       cwd => "{$*CWD}/rakudo",
       description => "build moar"
     ) if $.build-rakudo eq "yes";
