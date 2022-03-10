@@ -12,24 +12,29 @@ class Pipeline does Sparky::JobApi::Role {
 
   method stage-test {
 
-    directory "rakudo";
+    directory "selfrepo";
 
     git-scm "https://github.com/rakudo/rakudo.git", %(
-      to => "rakudo"
+      to => "selfrepo"
     );
 
-    bash q:to /HERE/, %( description => "build moar", cwd => "{$*CWD}/rakudo") if $.build-rakudo eq "yes";
+    bash q:to /HERE/, %( description => "checkout-repos-for-test", cwd => "{$*CWD}" );
+      perl selfrepo/tools/build/checkout-repos-for-test.pl \
+      rev-9072438-selfrepo downstream downstream
+    HERE
+
+    bash q:to /HERE/, %( description => "build moar", cwd => "{$*CWD}/MoarVM" );
       set -x
       export MAKEFLAGS=-j6 && \
       perl Configure.pl && make -j6 install
     HERE
 
-    bash q:to /HERE/, %( description => "build nqp", cwd => "{$*CWD}/rakudo") if $.build-rakudo eq "yes";
+    bash q:to /HERE/, %( description => "build nqp", cwd => "{$*CWD}/nqp");
       set -x
       perl Configure.pl  --backends=moar && make install
     HERE
 
-    bash q:to /HERE/, %( description => "install rakudo", cwd => "{$*CWD}/rakudo") if $.build-rakudo eq "yes";
+    bash q:to /HERE/, %( description => "install rakudo", cwd => "{$*CWD}/rakudo" );
       set -x
       perl Configure.pl && make install
     HERE
