@@ -18,12 +18,20 @@ class Pipeline does Sparky::JobApi::Role {
       to => "rakudo"
     );
 
+    bash q:to /HERE/, %( description => "build moar", cwd => "{$*CWD}/rakudo") if $.build-rakudo eq "yes";
+      set -x
+      export MAKEFLAGS=-j6 && \
+      perl Configure.pl && make -j6 install
+    HERE
+
+    bash q:to /HERE/, %( description => "build nqp", cwd => "{$*CWD}/rakudo") if $.build-rakudo eq "yes";
+      set -x
+      perl Configure.pl  --backends=moar && make install
+    HERE
+
     bash q:to /HERE/, %( description => "install rakudo", cwd => "{$*CWD}/rakudo") if $.build-rakudo eq "yes";
       set -x
-      export MAKEFLAGS=-j6 \
-      perl Configure.pl \
-      --gen-moar --gen-nqp --backends=moar \
-      && make install
+      perl Configure.pl && make install
     HERE
 
     bash "git clone https://github.com/Raku/roast.git t/spec", %(
