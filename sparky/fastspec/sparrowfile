@@ -39,6 +39,8 @@ class Pipeline does Sparky::JobApi::Role {
       perl Configure.pl --prefix=../install && make install
     HERE
 
+    exit(0);
+
     bash "git clone https://github.com/Raku/roast.git rakudo/t/spec", %(
       cwd => "{$*CWD}",
       description => "clone roast spec"
