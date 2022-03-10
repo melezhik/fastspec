@@ -26,23 +26,23 @@ class Pipeline does Sparky::JobApi::Role {
     bash q:to /HERE/, %( description => "build moar", cwd => "{$*CWD}/MoarVM" );
       set -x
       export MAKEFLAGS=-j6 && \
-      perl Configure.pl && make -j6 install
+      perl Configure.pl --prefix=../install && make -j6 install
     HERE
 
     bash q:to /HERE/, %( description => "build nqp", cwd => "{$*CWD}/nqp");
       set -x
-      perl Configure.pl  --backends=moar && make install
+      perl Configure.pl  --prefix=../install --backends=moar && make install
     HERE
 
     bash q:to /HERE/, %( description => "install rakudo", cwd => "{$*CWD}/rakudo" );
       set -x
-      perl Configure.pl && make install
+      perl Configure.pl --prefix=../install && make install
     HERE
 
-    bash "git clone https://github.com/Raku/roast.git t/spec", %(
-      cwd => "{$*CWD}/rakudo",
-      description => "clone roast spec"
-    );
+    #bash "git clone https://github.com/Raku/roast.git t/spec", %(
+    #  cwd => "{$*CWD}",
+    #  description => "clone roast spec"
+    #);
 
     my @lines = "rakudo/t/spec/spectest.data".IO.lines;
 
