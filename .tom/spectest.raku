@@ -1,6 +1,6 @@
 my $basedir = config()<basedir>;
 my $worker = %*ENV<WORKER>;
-my $spec-chunk = config()<spec-chunk>;
+my $chunk = config()<chunk>;
 
 directory "$basedir/rakudo/t/spec";
 
@@ -12,15 +12,13 @@ my @lines = "$basedir/rakudo/t/spec/spectest.data".IO.lines;
 
 my $lines-cnt = @lines.elems;
 
-my $chunk = ($lines-cnt / $spec-chunk.Int ).Int;
-
-say "spectest.data lines cnt: {$lines-cnt} | chunk size: {$chunk}";
+say "spectest.data lines cnt: {$lines-cnt} | chunk size: {$chunk} | chunk num: {$worker}";
 
 my @t; 
 
 my $from = $chunk*($worker.Int - 1);
 
-my $to = $worker.Int == $spec-chunk.Int ?? ( @lines.elems - 1 ) !! $chunk*($worker.Int);
+my $to = $from >= $lines-cnt ?? $lines-cnt - 1 !! $from + $chunk - 1;
 
 say "chunk, process lines [$from ..$to]";
 
