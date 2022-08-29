@@ -1,3 +1,4 @@
 {
-  basedir => ".build"
+  basedir => ".build",
+  spec-chunk => 750
 }
