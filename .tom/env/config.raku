@@ -1,4 +1,4 @@
 {
   basedir => ".build",
-  chunk => 750
+  chunk => 480
 }
