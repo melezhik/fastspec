@@ -2,6 +2,7 @@ projects:
   fastspec:
     path: git@github.com:melezhik/fastspec.git
     action: build-rakudo spectest
+    #action: status 
     options: --no_index_update
     hosts:
       -
