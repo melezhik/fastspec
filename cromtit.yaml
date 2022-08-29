@@ -4,9 +4,11 @@ projects:
     action: build-rakudo spectest
     options: --no_index_update
     hosts:
-      - url: https://sparrowhub.io:4000
+      -
+        url: https://sparrowhub.io:4000
         vars:
           WORKER: 1
-      - url: http://127.0.0.1:4000
+      -
+        url: http://127.0.0.1:4000
         vars:
           WORKER: 2
