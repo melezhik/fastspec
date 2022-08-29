@@ -4,6 +4,7 @@ directory "$basedir/selfrepo";
 
 directory-delete "$basedir/rakudo";
 directory-delete "$basedir/nqp";
+directory-delete "$basedir/MoarVM";
 
 git-scm "https://github.com/selfrepo/rakudo.git", %(
   to => "$basedir/selfrepo"
