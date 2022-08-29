@@ -18,7 +18,7 @@ my @t;
 
 my $from = $chunk*($worker.Int - 1);
 
-my $to = $from >= $lines-cnt ?? $lines-cnt - 1 !! $from + $chunk - 1;
+my $to = ($from + $chunk >= $lines-cnt - 1) ?? $lines-cnt - 1 !! $from + $chunk - 1;
 
 say "chunk, process lines [$from ..$to]";
 
