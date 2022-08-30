@@ -1,3 +1,4 @@
+storage: https://sparrowhub.io:4000
 projects:
   foo:
     path: git@github.com:melezhik/fastspec.git
@@ -19,15 +20,15 @@ projects:
         - README.md
     options: --no_index_update
     hosts:
-      #-
-      #  url: https://sparrowhub.io:4000
-      #  vars:
-      #    WORKER: 1
-      #-
-      #  url: https://192.168.0.3:4001
-      #  vars:
-      #    WORKER: 2
       -
-        url: http://127.0.0.1:4000
+        url: http://fastspec01.dnfyfbajgzgaase4.westus2.azurecontainer.io:4000
+        vars:
+          WORKER: 1
+      -
+        url: http://fastspec01.dnfyfbajgzgaase4.westus2.azurecontainer.io:4000
+        vars:
+          WORKER: 2
+      -
+        url: http://fastspec03.gfgvhfb0fgdqakd8.westus2.azurecontainer.io:4000
         vars:
           WORKER: 3
