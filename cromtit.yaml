@@ -6,7 +6,7 @@ projects:
       out:
         -
           file: README.md
-          path: scm/README.md
+          path: README.md
   fastspec:
     path: git@github.com:melezhik/fastspec.git
     before:
