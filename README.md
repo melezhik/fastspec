@@ -5,7 +5,7 @@ Ran rakudo spec tests in parallel on multiple hosts using Tomtit and Cromtit
 
 # Design
 
-So and idea, split t/spec/spectest.chunk.data into chunks
+So an idea is to split t/spec/spectest.data into chunks
 and test against those chunks on parallel hosts:
 
 
