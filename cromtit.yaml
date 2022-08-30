@@ -1,7 +1,7 @@
 storage: https://sparrowhub.io:4000
 projects:
   foo:
-    path: git@github.com:melezhik/fastspec.git
+    path: https://github.com/melezhik/fastspec.git
     action: test111
     artifacts:
       out:
@@ -9,7 +9,7 @@ projects:
           file: README.md
           path: README.md
   fastspec:
-    path: git@github.com:melezhik/fastspec.git
+    path: https://github.com/melezhik/fastspec.git
     before:
       -
         name: foo
@@ -25,7 +25,7 @@ projects:
         vars:
           WORKER: 1
       -
-        url: http://fastspec01.dnfyfbajgzgaase4.westus2.azurecontainer.io:4000
+        url: http://fastspec02.f5guhjhggge7g9bw.westus2.azurecontainer.io:4000
         vars:
           WORKER: 2
       -
