@@ -1,18 +1,32 @@
 projects:
+  foo:
+    path: git@github.com:melezhik/fastspec.git
+    action: test111
+    artifacts:
+      out:
+        -
+          file: README.md
+          path: scm/README.md
   fastspec:
     path: git@github.com:melezhik/fastspec.git
-    action: build-rakudo spectest
-    #action: status 
+    before:
+      -
+        name: foo
+    #action: build-rakudo spectest
+    action: test222
+    artifacts:
+      in:
+        - README.md
     options: --no_index_update
     hosts:
-      -
-        url: https://sparrowhub.io:4000
-        vars:
-          WORKER: 1
-      -
-        url: https://192.168.0.3:4001
-        vars:
-          WORKER: 2
+      #-
+      #  url: https://sparrowhub.io:4000
+      #  vars:
+      #    WORKER: 1
+      #-
+      #  url: https://192.168.0.3:4001
+      #  vars:
+      #    WORKER: 2
       -
         url: http://127.0.0.1:4000
         vars:
