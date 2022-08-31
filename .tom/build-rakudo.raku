@@ -1,3 +1,5 @@
+exit(0);
+
 my $basedir = config()<basedir>;
 
 directory "$basedir/selfrepo";
