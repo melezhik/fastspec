@@ -1,26 +1,25 @@
 storage: https://sparrowhub.io:4000
 projects:
-  rakudo-build:
+  build:
     path: https://github.com/melezhik/fastspec.git
-    action: build-rakudo archive-rakudo
     artifacts:
       out:
         -
           file: rakudo.tar.gz
           path: .cache/rakudo.tar.gz
-    hosts:
-      -
-        url: http://fastspec01.dnfyfbajgzgaase4.westus2.azurecontainer.io:4000
   fastspec:
     path: https://github.com/melezhik/fastspec.git
     before:
       -
-        name: rakudo-build
-    action:  spectest
+        name: build
+        action: build-rakudo archive-rakudo
+        hosts:
+          -
+            url: http://fastspec01.dnfyfbajgzgaase4.westus2.azurecontainer.io:4000
+    action: spectest
     artifacts:
       in:
         - rakudo.tar.gz
-    options: --no_index_update
     hosts:
       -
         url: http://fastspec01.dnfyfbajgzgaase4.westus2.azurecontainer.io:4000
