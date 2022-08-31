@@ -2,6 +2,14 @@ my $basedir = config()<basedir>;
 my $worker = %*ENV<WORKER>;
 my $chunk = config()<chunk>;
 
+directory $basedir;
+
+bash q:to /HERE/, %( cwd => "{$*CWD}/$basedir" , description => "unpack rakudo" );
+  tar -xzf ../.artifacts/rakudo.tar.gz
+  ls -l 
+  ls -l rakudo 
+HERE
+
 directory "$basedir/rakudo/t/spec";
 
 git-scm "https://github.com/Raku/roast.git", %(

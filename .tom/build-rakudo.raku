@@ -30,4 +30,3 @@ bash q:to /HERE/, %( description => "install rakudo", cwd => "{$*CWD}/$basedir/r
   set -x
   perl Configure.pl --prefix=../install && make -j6 install
 HERE
-
