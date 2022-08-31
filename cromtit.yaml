@@ -5,7 +5,7 @@ projects:
     artifacts:
       out:
         -
-          file: rakudo.tar.gz
+          file: rakudo.tar
           path: .cache/rakudo.tar
   fastspec:
     path: https://github.com/melezhik/fastspec.git
