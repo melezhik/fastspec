@@ -2,8 +2,6 @@ my $basedir = config()<basedir>;
 
 directory "$basedir/selfrepo";
 
-exit(0);
-
 directory-delete "$basedir/rakudo";
 directory-delete "$basedir/nqp";
 directory-delete "$basedir/MoarVM";
