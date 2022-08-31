@@ -4,6 +4,7 @@ directory ".cache";
 bash q:to /HERE/, %( description => "archive rakudo distribution", cwd => "{$*CWD}/$basedir/" );
   set -x
   touch foo.txt
-  tar --exclude-vcs  -czf ../.cache/rakudo.tar.gz  foo.txt
-  ls -lh ../.cache/rakudo.tar.gz 
+  tar --exclude-vcs  -cf ../.cache/rakudo.tar  foo.txt
+  ls -lh ../.cache/rakudo.tar
+  tar -tf ../.cache/rakudo.tar
 HERE

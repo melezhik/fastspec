@@ -5,7 +5,7 @@ my $chunk = config()<chunk>;
 directory $basedir;
 
 bash q:to /HERE/, %( cwd => "{$*CWD}/$basedir" , description => "unpack rakudo" );
-  tar -xzf ../.artifacts/rakudo.tar.gz
+  tar -xf ../.artifacts/rakudo.tar
   ls -l 
   ls -l rakudo 
 HERE
