@@ -1,4 +1,4 @@
-exit(0);
+#exit(0);
 
 my $basedir = config()<basedir>;
 
