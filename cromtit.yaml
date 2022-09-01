@@ -5,6 +5,9 @@ projects:
     artifacts:
       out:
         -
+          file: install.tar
+          path: .cache/install.tar
+        -
           file: rakudo.tar
           path: .cache/rakudo.tar
   fastspec:
@@ -20,6 +23,7 @@ projects:
     action: spectest
     artifacts:
       in:
+        - install.tar
         - rakudo.tar
     hosts:
       -
