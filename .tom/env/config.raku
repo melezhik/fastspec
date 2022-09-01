@@ -2,7 +2,7 @@
   basedir => ".build",
   chunk => 750,
   hosts => [
-    "20.72.247.238",
-    "20.252.23.105",
+    "fastspec01.westus2.azurecontainer.io",
+    "fastspec02.westus2.azurecontainer.io",
   ]
 }

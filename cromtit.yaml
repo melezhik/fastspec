@@ -15,7 +15,7 @@ projects:
         action: build-rakudo archive-rakudo
         hosts:
           -
-            url: http://20.72.247.238:4000
+            url: http://fastspec01.westus2.azurecontainer.io:4000
             # url: http://127.0.0.1:4000
     action: spectest
     artifacts:
@@ -23,12 +23,12 @@ projects:
         - rakudo.tar
     hosts:
       -
-        url: http://20.72.247.238:4000
+        url: http://fastspec01.westus2.azurecontainer.io:4000
         #url: http://127.0.0.1:4000
         vars:
           WORKER: 1
       -
-        url: http://20.252.23.105:4000
+        url: http://fastspec02.westus2.azurecontainer.io:4000
         vars:
           WORKER: 2
       #-
