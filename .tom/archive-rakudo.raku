@@ -14,6 +14,6 @@ bash q:to /HERE/, %( description => "archive rakudo distribution", cwd => "{$*CW
   set -e
   tar --exclude-vcs  -cf ../.cache/distro.tar .
   ls -lh ../.cache/distro.tar
-  tar -tf ../.cache/distro.tar
+  #tar -tf ../.cache/distro.tar
 HERE
 
