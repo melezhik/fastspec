@@ -5,11 +5,8 @@ projects:
     artifacts:
       out:
         -
-          file: install.tar
-          path: .cache/install.tar
-        -
-          file: rakudo.tar
-          path: .cache/rakudo.tar
+          file: distro.tar
+          path: .cache/distro.tar
   fastspec:
     path: https://github.com/melezhik/fastspec.git
     before:
@@ -23,8 +20,7 @@ projects:
     action: spectest
     artifacts:
       in:
-        - install.tar
-        - rakudo.tar
+        - distro.tar
     hosts:
       -
         url: http://fastspec01.westus2.azurecontainer.io:4000

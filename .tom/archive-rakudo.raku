@@ -12,15 +12,8 @@ directory ".cache";
 bash q:to /HERE/, %( description => "archive rakudo distribution", cwd => "{$*CWD}/$basedir/" );
   set -x
   set -e
-  tar --exclude-vcs  -cf ../.cache/install.tar install
-  ls -lh ../.cache/install.tar
-  tar -tf ../.cache/install.tar
+  tar --exclude-vcs  -cf ../.cache/distro.tar .
+  ls -lh ../.cache/distro.tar
+  tar -tf ../.cache/distro.tar
 HERE
 
-bash q:to /HERE/, %( description => "archive rakudo folder", cwd => "{$*CWD}/$basedir/" );
-  set -x
-  set -e
-  tar --exclude-vcs  -cf ../.cache/rakudo.tar rakudo
-  ls -lh ../.cache/rakudo.tar
-  tar -tf ../.cache/rakudo.tar
-HERE
