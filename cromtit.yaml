@@ -31,7 +31,7 @@ projects:
         url: http://fastspec02.westus2.azurecontainer.io:4000
         vars:
           WORKER: 2
-      #-
-      #  url: http://fastspec03.gfgvhfb0fgdqakd8.westus2.azurecontainer.io:4000
-      #  vars:
-      #    WORKER: 3
+      -
+        url: http://fastspec03.westus2.azurecontainer.io:4000
+        vars:
+          WORKER: 3
